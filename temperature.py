@@ -23,10 +23,15 @@ class Temperature:
             return (self.value - 32) * 5 / 9
         elif self.unit == "K":
             return self.value - 273.15
+        
     def to_fahrenheit(self) -> float:
         if self.unit == "F":
             return self.value
-        return self.to_celsius() * 9 / 5 + 32
+        elif self.unit == "C": 
+            return self.value * 9 / 5 + 32
+        elif self.unit == "K": 
+
+            return (self.value - 273.15) * 9 / 5 + 32
     def to_kelvin(self) -> float:
         if self.unit == "C":
             return self.value + 273.15
@@ -34,6 +39,7 @@ class Temperature:
             return (self.value - 32) * 5 / 9 + 273.15
         elif self.unit == "K":
             return self.value
+        
     def convert_to(self, target_unit: str) -> "Temperature":
         if not isinstance(target_unit,str) or target_unit.upper() not in ("C","F","K"):
             raise ValueError("Target unit must be 'C', 'F', or 'K'")
@@ -46,12 +52,13 @@ class Temperature:
             return Temperature((self.to_celsius() * 9 / 5) + 32, "F")
         elif target_unit == "K":
             return Temperature(self.to_kelvin(), "K")
+        
     def __str__(self) -> str:
-        symbol = "K" if self.unit == "K" else f"°{self.unit}"
-        return f"{self.value:.2f} {symbol}"
+        return f"Tempraturen er {self.value:.2f} {self.unit}"
 
     def __repr__(self) -> str:
         return f"Temperature({self.value!r}, {self.unit!r})"
+    
     def _compare(self, other):
         if not isinstance(other, Temperature):
             return NotImplemented
