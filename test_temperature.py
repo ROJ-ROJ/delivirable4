@@ -1,12 +1,15 @@
 import pytest
 from temperature import Temperature
 
+#test for temperature class
+#test for initializationenn
 def test_temperature_initialization():
     temp = Temperature(25, "C")
     assert temp.value == 25
     assert temp.unit == "C"
     for unit in ["C", "F", "K"]:
         assert Temperature(25, unit).unit == unit.upper()
+
 def test_read_only():
     t=Temperature(25, "C")
     with pytest.raises(AttributeError):
@@ -33,12 +36,14 @@ def test_below_absolute_zero(value, unit):
     (37, 98.6, 310.15),  # Freezing point of water
     (100, 212, 373.15),  # Boiling point of water
 ])
+#test for conversion mellom enheter
 def test_conversion(celsius, fahrenheit, kelvin):
     for value, unit in [(celsius, "C"), (fahrenheit, "F"), (kelvin, "K")]:
         t=Temperature(value, unit)
         assert t.to_celsius() == pytest.approx(celsius, rel=1e-9)
         assert t.to_fahrenheit() == pytest.approx(fahrenheit, rel=1e-9)
         assert t.to_kelvin() == pytest.approx(kelvin, rel=1e-9)
+#tester for convert mellom enheter 
 def test_round_trip():
     original = Temperature(25, "C")
     converted = original.convert_to("F")
@@ -48,6 +53,7 @@ def test_round_trip():
     result = converted.convert_to("K").convert_to("C")
     assert result.unit == "C"
     assert result == original
+#tester comparisonene
 def test_comparison():
     cold = Temperature(0, "C")
     same_cold = Temperature(32, "F")
@@ -59,15 +65,18 @@ def test_comparison():
     assert cold <= same_cold
     assert warm > cold
     assert cold >= same_cold
+#tester for float presicjon
 def test_tolerance():
     t=Temperature(1, "k")
     assert t == Temperature(1 + 0.5e-9, "K")
     assert t<Temperature(1 + 2e-9, "K")
+
 def test_string_representation():
     t=Temperature(25, "C")
     assert t.__eq__(25) is NotImplemented
     with pytest.raises(TypeError):
         _=t<25
+#test for str og repr metodene
 def test_formatting():
     t=Temperature(25, "C")
     assert str(t) == "25.00 °C"
